@@ -6,17 +6,22 @@ var app = express()
 var payload = { foo: 'bar' };
 var secret = 'tpA8HFIZg6DUvt0wxUcZvH6NaKpGbFE7pt253UB2';
 
+app.use(jwtE({ secret: secret }).unless({ path: ['/token', '/login'] }));
 
 
-app.get('/', function (req, res) {
+app.get('/login', function (req, res) {
     res.json({ oelo: 'kykelyn' })
 })
 
-app.get('/protected',
-    jwtE({ secret: secret }),
-    function (req, res) {
-        res.sendStatus(200);
-    });
+// app.get('/protected',
+//     jwtE({ secret: secret }),
+//     function (req, res) {
+//         res.sendStatus(200);
+//     });
+
+app.get('/protected', function (req, res) {
+    res.sendStatus(200);
+});
 
 app.use(function (err, req, res, next) {
     if (err.name === 'UnauthorizedError') {
